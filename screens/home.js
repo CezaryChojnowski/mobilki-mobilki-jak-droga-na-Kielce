@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
 import NumericInput from 'react-native-numeric-input'
 import DatePicker from 'react-native-datepicker'
-
+import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 
 
 export default function home({navigation}) {
@@ -12,24 +12,38 @@ export default function home({navigation}) {
   const [fuelPrice, setFuelPrice] = useState(null);
   const [kilometersDriven, setKilometersDriven] = useState(null);
   const [refuelingDate, setRefuelingDate] = useState(null);
+  const [type, setType] = useState(0);
 
-  const pressHanlder = () => {
-    navigation.push('Info')
-  }
+  var radio_props = [
+    {label: 'Benzyna/Diesel', value: 0 },
+    {label: 'Energia', value: 1 }
+  ];
   return (
+<>
     
     <View style={styles.container}>
+    <Text>Wybierz typ pojazdu</Text>
+    <RadioForm
+          radio_props={radio_props}
+          initial={0}
+          onPress={(value) => setType(value)}
+          />
       <Text>Wprowadź nazwę pojazdu</Text>
       <TextInput 
         style={styles.input}
         onChangeText={(val) => setCarName(val)}/>
-      <Text>Wprowadź ilośc zatankowanego paliwa</Text>
+
+
+        {type==0 && <Text>Wprowadź ilośc zatankowanego paliwa</Text>}
+        {type==1 && <Text>Wprowadź poziom naładowania</Text>}
       <TextInput 
         style={styles.input}
         onChangeText={(val) => setFueledUp(val)}
         keyboardType={'numeric'}
         />
-      <Text>Wprowadź cenę paliwa</Text>
+
+      {type==0 && <Text>Wprowadź cenę paliwa</Text>}
+      {type==1 && <Text>Wprowadź cenę energi</Text>}
       <TextInput 
         style={styles.input}
         onChangeText={(val) => setFuelPrice(val)}
@@ -46,10 +60,10 @@ export default function home({navigation}) {
         style={{width: 200}}
         date={refuelingDate}
         mode="date"
-        placeholder="select date"
+        placeholder="Wybierz datę"
         format="YYYY-MM-DD"
-        confirmBtnText="Confirm"
-        cancelBtnText="Cancel"
+        confirmBtnText="Potwierdź"
+        cancelBtnText="Anuluj"
         customStyles={{
           dateIcon: {
             position: 'absolute',
@@ -68,7 +82,7 @@ export default function home({navigation}) {
         onPress={() => navigation.navigate('Info', {carName: carName})}
       />
     </View>
-
+</>
   );
 }
 
