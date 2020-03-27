@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
-import NumericInput from 'react-native-numeric-input'
+import { StyleSheet, Text, View, TextInput, Button} from 'react-native';
 import DatePicker from 'react-native-datepicker'
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 
@@ -19,11 +18,10 @@ export default function home({navigation}) {
     {label: 'Energia', value: 1 }
   ];
   return (
-<>
-    
     <View style={styles.container}>
     <Text>Wybierz typ pojazdu</Text>
     <RadioForm
+          labelHorizontal={true}
           radio_props={radio_props}
           initial={0}
           onPress={(value) => setType(value)}
@@ -32,10 +30,8 @@ export default function home({navigation}) {
       <TextInput 
         style={styles.input}
         onChangeText={(val) => setCarName(val)}/>
-
-
         {type==0 && <Text>Wprowadź ilośc zatankowanego paliwa</Text>}
-        {type==1 && <Text>Wprowadź poziom naładowania</Text>}
+        {type==1 && <Text>Wprowadź ilość pobranej energii</Text>}
       <TextInput 
         style={styles.input}
         onChangeText={(val) => setFueledUp(val)}
@@ -49,7 +45,7 @@ export default function home({navigation}) {
         onChangeText={(val) => setFuelPrice(val)}
         keyboardType={'numeric'}
         />
-      <Text>Wprowadź ilość przejechanych kilometrówa</Text>
+      <Text>Wprowadź ilość przejechanych kilometrów</Text>
       <TextInput 
         style={styles.input}
         onChangeText={(val) => setKilometersDriven(val)}
@@ -79,11 +75,18 @@ export default function home({navigation}) {
       />
       <Button
         title="Przelicz"
-        onPress={() => navigation.navigate('Info', {carName: carName})}
+        onPress={() => navigation.navigate('Info', {
+          carName: carName, 
+          fueledUp: fueledUp, 
+          fuelPrice: fuelPrice,
+          kilometersDriven: kilometersDriven,
+          refuelingDate: refuelingDate,
+          type: type,
+          CarTypeString: radio_props.find(x=>x.value === type).label
+        })}
       />
     </View>
-</>
-  );
+    );
 }
 
 const styles = StyleSheet.create({
@@ -92,6 +95,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    
   },
   input:{
     borderWidth: 1,
